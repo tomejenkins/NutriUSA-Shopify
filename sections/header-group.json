@@ -1,1 +1,144 @@
-{"type":"header","name":"Header","sections":{"header_section":{"type":"header","blocks":{"header-logo":{"type":"_header-logo","static":true,"settings":{"hide_logo_on_home_page":false,"padding-block-start":0,"padding-block-end":0},"blocks":{}},"header-menu":{"type":"_header-menu","static":true,"settings":{"menu":"main-menu","color_scheme":"scheme-4","type_font_primary_size":"0.875rem","menu_font_style":"inverse","type_font_primary_link":"body","type_case_primary_link":"none","menu_style":"text","featured_products_aspect_ratio":"4 \/ 5","featured_collections_aspect_ratio":"16 \/ 9","image_border_radius":0,"navigation_bar":true,"color_scheme_navigation_bar":"","drawer_accordion":true,"drawer_accordion_expand_first":false,"drawer_dividers":false},"blocks":{}}},"settings":{"logo_position":"center","menu_position":"left","menu_row":"top","customer_account_menu":"customer-account-main-menu","show_search":true,"search_position":"right","search_row":"top","show_country":true,"country_selector_style":false,"show_language":true,"localization_font":"heading","localization_font_size":"1rem","localization_position":"right","localization_row":"top","section_width":"page-width","section_height":"standard","enable_sticky_header":"always","divider_width":0,"divider_size":"page-width","border_width":0,"actions_display_style":"icon","actions_font_size":"0.875rem","actions_font":"body","actions_text_case":"none","color_scheme_top":"scheme-1","color_scheme_bottom":"","color_scheme_transparent":"scheme-6","enable_transparent_header_home":false,"home_color_scheme":"default","enable_transparent_header_product":false,"product_color_scheme":"default","enable_transparent_header_collection":false,"collection_color_scheme":"default"}},"header_announcements_AwzUXA":{"type":"header-announcements","blocks":{"announcement_7WXihd":{"type":"_announcement","settings":{"text":"Shop our latest arrivals","link":"","font":"var(--font-heading--family)","font_size":"1rem","weight":"","letter_spacing":"normal","case":"none"},"blocks":{}}},"block_order":["announcement_7WXihd"],"name":"t:names.announcement_bar","settings":{"speed":5,"section_width":"page-width","color_scheme":"","divider_width":0,"padding-block-start":15,"padding-block-end":15}}},"order":["header_section","header_announcements_AwzUXA"]}
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "header_announcements_AwzUXA": {
+      "type": "header-announcements",
+      "blocks": {
+        "announcement_1": {
+          "type": "_announcement",
+          "settings": {
+            "media_type": "icon",
+            "icon_asset": "icon-discount.svg",
+            "text": "Descuentos mensuales y ofertas exclusivas",
+            "link": ""
+          }
+        },
+        "announcement_2": {
+          "type": "_announcement",
+          "settings": {
+            "media_type": "icon",
+            "icon_asset": "icon-orders.svg",
+            "text": "Envío nacional rápido a todo el Perú",
+            "link": ""
+          }
+        },
+        "announcement_3": {
+          "type": "_announcement",
+          "settings": {
+            "media_type": "icon",
+            "icon_asset": "icon-cart.svg",
+            "text": "Productos NutriUSA en un solo clic",
+            "link": ""
+          }
+        },
+        "announcement_4": {
+          "type": "_announcement",
+          "settings": {
+            "media_type": "icon",
+            "icon_asset": "icon-inventory.svg",
+            "text": "Stock renovado cada semana",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_1",
+        "announcement_2",
+        "announcement_3",
+        "announcement_4"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "item_min_width": 180,
+        "section_width": "full-width",
+        "color_scheme": "scheme-4",
+        "divider_width": 0,
+        "padding-block-start": 10,
+        "padding-block-end": 10
+      }
+    },
+    "header_section": {
+      "type": "header-main-custom",
+      "settings": {
+        "main_menu": "main-menu",
+        "secondary_menu": "main-menu",
+        "category_menu": "main-menu",
+        "menu_button_label": "Menú",
+        "category_selector_label": "Categorías",
+        "category_default_text": "Todas las categorías",
+        "search_placeholder": "¿Qué estás buscando hoy?",
+        "show_category_selector": true,
+        "show_microphone_icon": true,
+        "location_label": "Ubicación",
+        "location_url": "",
+        "wishlist_label": "Favoritos",
+        "wishlist_url": "",
+        "compare_label": "Comparar",
+        "compare_url": "",
+        "section_width": "page-width",
+        "logo_width": 210,
+        "enable_sticky": true,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 10,
+        "padding-block-end": 10
+      }
+    },
+    "header_utility_row_Xk32pM": {
+      "type": "header-utility-row",
+      "blocks": {
+        "support_1": {
+          "type": "support_link",
+          "settings": {
+            "label": "Devoluciones y cambios",
+            "link": ""
+          }
+        },
+        "support_2": {
+          "type": "support_link",
+          "settings": {
+            "label": "Preguntas frecuentes",
+            "link": ""
+          }
+        },
+        "support_3": {
+          "type": "support_link",
+          "settings": {
+            "label": "Rastrea tu pedido",
+            "link": ""
+          }
+        },
+        "support_4": {
+          "type": "support_link",
+          "settings": {
+            "label": "Ayuda y soporte",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "support_1",
+        "support_2",
+        "support_3",
+        "support_4"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "item_gap": 20,
+        "email_text": "hola@nutriusaimportaciones.com",
+        "email_link": "mailto:hola@nutriusaimportaciones.com",
+        "phone_text": "+51 987 654 321",
+        "phone_link": "tel:+51987654321",
+        "locale_text": "Español (PEN S/)",
+        "padding-block-start": 10,
+        "padding-block-end": 10
+      }
+    }
+  },
+  "order": [
+    "header_announcements_AwzUXA",
+    "header_section",
+    "header_utility_row_Xk32pM"
+  ]
+}

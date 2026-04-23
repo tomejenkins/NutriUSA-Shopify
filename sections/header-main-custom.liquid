@@ -1,0 +1,534 @@
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<header-component
+  id="header-component"
+  class="header-main-custom color-{{ section.settings.color_scheme }}"
+  {% if section.settings.enable_sticky %}
+    sticky="always"
+  {% endif %}
+>
+  <script src="{{ 'header.js' | asset_url }}" type="module" fetchpriority="low"></script>
+
+  <div
+    class="header-main-custom__top section section--{{ section.settings.section_width }} spacing-style"
+    style="{% render 'spacing-padding', settings: section.settings %};"
+    ref="headerRowTop"
+  >
+    <div class="header-main-custom__menu" ref="headerDrawerContainer">
+      <details class="header-main-custom__drawer">
+        <summary class="button button-unstyled header-main-custom__menu-button" aria-label="{{ 'accessibility.menu' | t }}">
+          <span class="svg-wrapper">{{ 'icon-menu.svg' | inline_asset_content }}</span>
+          <span>{{ section.settings.menu_button_label }}</span>
+        </summary>
+
+        <div class="header-main-custom__drawer-panel color-{{ settings.drawer_color_scheme }}">
+          <nav aria-label="{{ 'accessibility.header_navigation_label' | t }}">
+            <ul class="list-unstyled">
+              {% for link in section.settings.main_menu.links %}
+                <li>
+                  <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+
+                  {% if link.links != blank %}
+                    <ul class="list-unstyled header-main-custom__drawer-submenu">
+                      {% for childlink in link.links %}
+                        <li>
+                          <a href="{{ childlink.url }}"{% if childlink.current %} aria-current="page"{% endif %}>{{ childlink.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
+      </details>
+    </div>
+
+    <a href="{{ routes.root_url }}" class="header-main-custom__logo" style="--logo-width: {{ section.settings.logo_width }}px;">
+      {% if settings.logo != blank %}
+        {{
+          settings.logo
+          | image_url: width: 400
+          | image_tag:
+            widths: '120, 180, 240, 320, 400',
+            class: 'header-main-custom__logo-image',
+            alt: shop.name
+        }}
+      {% else %}
+        <span class="h4">{{ shop.name }}</span>
+      {% endif %}
+    </a>
+
+    <div class="header-main-custom__search-wrap">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="header-main-custom__search-form">
+        {% if section.settings.show_category_selector %}
+          <label class="visually-hidden" for="HeaderCategorySelect-{{ section.id }}">{{ section.settings.category_selector_label }}</label>
+          <select id="HeaderCategorySelect-{{ section.id }}" class="header-main-custom__category-select" ref="categorySelect">
+            <option value="">{{ section.settings.category_default_text }}</option>
+            {% for link in section.settings.category_menu.links %}
+              <option value="{{ link.url }}">{{ link.title }}</option>
+            {% endfor %}
+          </select>
+        {% endif %}
+
+        <label class="visually-hidden" for="HeaderSearchInput-{{ section.id }}">{{ 'content.search_input_label' | t }}</label>
+        <input
+          id="HeaderSearchInput-{{ section.id }}"
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="{{ section.settings.search_placeholder }}"
+          class="header-main-custom__search-input"
+        >
+        <input name="options[prefix]" type="hidden" value="last">
+
+        {% if section.settings.show_microphone_icon %}
+          <button type="button" class="button-unstyled header-main-custom__mic" aria-label="Buscar por voz">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Zm5-3a1 1 0 1 1 2 0 7 7 0 1 1-14 0 1 1 0 1 1 2 0 5 5 0 1 0 10 0Zm-4 8v2h-2v-2h2Z"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        <button type="submit" class="button-unstyled header-main-custom__submit" aria-label="{{ 'content.search_input_label' | t }}">
+          <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="header-main-custom__actions">
+      {% if section.settings.location_label != blank and section.settings.location_url != blank %}
+        <a href="{{ section.settings.location_url }}" class="header-main-custom__action" aria-label="{{ section.settings.location_label }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/></svg>
+        </a>
+      {% endif %}
+
+      {% if section.settings.wishlist_label != blank and section.settings.wishlist_url != blank %}
+        <a href="{{ section.settings.wishlist_url }}" class="header-main-custom__action" aria-label="{{ section.settings.wishlist_label }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-6.7-4.4-9.3-8.1C.8 10.1 2 6 6 6c2.1 0 3.4 1.2 4 2.2C10.6 7.2 11.9 6 14 6c4 0 5.2 4.1 3.3 6.9C18.7 16.6 12 21 12 21Z"/></svg>
+        </a>
+      {% endif %}
+
+      {% if section.settings.compare_label != blank and section.settings.compare_url != blank %}
+        <a href="{{ section.settings.compare_url }}" class="header-main-custom__action" aria-label="{{ section.settings.compare_label }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 3h2v14H7V3Zm8 4h2v14h-2V7ZM3 19h18v2H3v-2Z"/></svg>
+        </a>
+      {% endif %}
+
+      {% if shop.customer_accounts_enabled %}
+        <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header-main-custom__action" aria-label="{{ 'content.account_title' | t }}">
+          <span class="svg-wrapper">{{ 'icon-account.svg' | inline_asset_content }}</span>
+        </a>
+      {% endif %}
+
+      <a href="{{ routes.cart_url }}" class="header-main-custom__action header-main-custom__action--cart" aria-label="{{ 'accessibility.cart' | t }}">
+        <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+        {% if cart.item_count > 0 %}
+          <span class="header-main-custom__cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+
+  <nav
+    class="header-main-custom__bottom section section--{{ section.settings.section_width }}{% if section.settings.secondary_menu == blank %} hidden{% endif %}"
+    aria-label="Navegación destacada"
+    ref="headerMenu"
+  >
+    <ul class="header-main-custom__bottom-list list-unstyled">
+      {% for link in section.settings.secondary_menu.links %}
+        <li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <script type="module">
+    const sectionId = {{ section.id | json }};
+    const select = document.getElementById(`HeaderCategorySelect-${sectionId}`);
+    if (select) {
+      select.addEventListener('change', (event) => {
+        const url = event.target.value;
+        if (url) window.location.href = url;
+      });
+    }
+  </script>
+</header-component>
+
+{% stylesheet %}
+  .header-main-custom {
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .header-main-custom__top {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--gap-md);
+  }
+
+  .header-main-custom__menu-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #234f94;
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+  }
+
+  .header-main-custom__drawer {
+    position: relative;
+  }
+
+  .header-main-custom__drawer[open] .header-main-custom__drawer-panel {
+    display: block;
+  }
+
+  .header-main-custom__drawer-panel {
+    position: absolute;
+    inset-inline-start: 0;
+    top: calc(100% + 0.5rem);
+    min-width: 280px;
+    max-height: 65vh;
+    overflow: auto;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--style-border-radius-popover);
+    padding: 1rem;
+    z-index: var(--layer-heightened);
+    display: none;
+    box-shadow: var(--shadow-popover);
+  }
+
+  .header-main-custom__drawer-panel a {
+    text-decoration: none;
+    color: var(--color-foreground);
+    display: block;
+    padding: 0.45rem 0;
+  }
+
+  .header-main-custom__drawer-submenu {
+    padding-inline-start: 0.85rem;
+    border-inline-start: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+    margin-block-end: 0.45rem;
+  }
+
+  .header-main-custom__logo {
+    width: var(--logo-width);
+    max-width: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .header-main-custom__logo-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .header-main-custom__search-form {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 0.8rem;
+    overflow: hidden;
+    background: var(--color-background);
+  }
+
+  .header-main-custom__category-select {
+    border: 0;
+    border-inline-end: 1px solid var(--color-border);
+    border-radius: 0;
+    min-height: 48px;
+    padding: 0 0.8rem;
+    background: transparent;
+    min-width: 170px;
+  }
+
+  .header-main-custom__search-input {
+    border: 0;
+    min-height: 48px;
+    padding: 0 0.9rem;
+    outline: 0;
+    background: transparent;
+  }
+
+  .header-main-custom__mic,
+  .header-main-custom__submit {
+    min-height: 48px;
+    width: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-main-custom__mic svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .header-main-custom__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .header-main-custom__action {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-foreground);
+    text-decoration: none;
+    position: relative;
+    border-radius: 999px;
+  }
+
+  .header-main-custom__action:hover {
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+
+  .header-main-custom__action svg,
+  .header-main-custom__action .svg-wrapper {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header-main-custom__cart-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #d2232a;
+    color: #fff;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  .header-main-custom__bottom {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .header-main-custom__bottom-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0.75rem 0;
+  }
+
+  .header-main-custom__bottom-list a {
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 989px) {
+    .header-main-custom__top {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .header-main-custom__menu,
+    .header-main-custom__logo,
+    .header-main-custom__actions {
+      justify-self: start;
+    }
+
+    .header-main-custom__search-form {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+    }
+
+    .header-main-custom__category-select {
+      display: none;
+    }
+
+    .header-main-custom__bottom-list {
+      overflow-x: auto;
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      padding-bottom: 0.9rem;
+      scrollbar-width: none;
+    }
+
+    .header-main-custom__bottom-list::-webkit-scrollbar {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Cabecera principal NutriUSA",
+  "class": "header-section",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Menú principal",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_menu",
+      "label": "Menú inferior"
+    },
+    {
+      "type": "link_list",
+      "id": "category_menu",
+      "label": "Menú de categorías"
+    },
+    {
+      "type": "text",
+      "id": "menu_button_label",
+      "label": "Texto del botón menú",
+      "default": "Menú"
+    },
+    {
+      "type": "text",
+      "id": "category_selector_label",
+      "label": "Etiqueta selector categorías",
+      "default": "Categorías"
+    },
+    {
+      "type": "text",
+      "id": "category_default_text",
+      "label": "Texto por defecto categorías",
+      "default": "Todas las categorías"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Placeholder del buscador",
+      "default": "¿Qué estás buscando hoy?"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_selector",
+      "label": "Mostrar selector de categorías",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_microphone_icon",
+      "label": "Mostrar ícono de micrófono",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Accesos rápidos"
+    },
+    {
+      "type": "text",
+      "id": "location_label",
+      "label": "Etiqueta ubicación",
+      "default": "Ubicación"
+    },
+    {
+      "type": "url",
+      "id": "location_url",
+      "label": "Enlace ubicación"
+    },
+    {
+      "type": "text",
+      "id": "wishlist_label",
+      "label": "Etiqueta favoritos",
+      "default": "Favoritos"
+    },
+    {
+      "type": "url",
+      "id": "wishlist_url",
+      "label": "Enlace favoritos"
+    },
+    {
+      "type": "text",
+      "id": "compare_label",
+      "label": "Etiqueta comparar",
+      "default": "Comparar"
+    },
+    {
+      "type": "url",
+      "id": "compare_url",
+      "label": "Enlace comparar"
+    },
+    {
+      "type": "header",
+      "content": "Diseño"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Ancho de sección",
+      "options": [
+        { "value": "page-width", "label": "Ancho de página" },
+        { "value": "full-width", "label": "Ancho completo" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Ancho del logo",
+      "min": 80,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "default": 210
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Cabecera fija",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Superior",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Inferior",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cabecera principal NutriUSA"
+    }
+  ]
+}
+{% endschema %}
