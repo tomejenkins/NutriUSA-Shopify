@@ -23,6 +23,9 @@
     <div class="header-utility__contact">
       {% if section.settings.email_text != blank %}
         <div class="header-utility__meta-item">
+          <span class="svg-wrapper header-utility__meta-icon" aria-hidden="true">
+            {{- 'icon-info.svg' | inline_asset_content -}}
+          </span>
           {% if section.settings.email_link != blank %}
             <a href="{{ section.settings.email_link }}" class="header-utility__link">{{ section.settings.email_text }}</a>
           {% else %}
@@ -33,6 +36,9 @@
 
       {% if section.settings.phone_text != blank %}
         <div class="header-utility__meta-item">
+          <span class="svg-wrapper header-utility__meta-icon" aria-hidden="true">
+            {{- 'icon-orders.svg' | inline_asset_content -}}
+          </span>
           {% if section.settings.phone_link != blank %}
             <a href="{{ section.settings.phone_link }}" class="header-utility__link">{{ section.settings.phone_text }}</a>
           {% else %}
@@ -43,6 +49,9 @@
 
       {% if section.settings.locale_text != blank %}
         <div class="header-utility__meta-item">
+          <span class="svg-wrapper header-utility__meta-icon" aria-hidden="true">
+            {{- 'icon-cart.svg' | inline_asset_content -}}
+          </span>
           <span>{{ section.settings.locale_text }}</span>
         </div>
       {% endif %}
@@ -79,6 +88,12 @@
     align-items: center;
     gap: 0.5rem;
     opacity: 0.9;
+  }
+
+  .header-utility__meta-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    opacity: 0.75;
   }
 
   .header-utility__item:not(:last-child)::after,
