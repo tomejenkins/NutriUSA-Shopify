@@ -2,33 +2,47 @@
 
 {%- assign block_settings = block.settings -%}
 {%- assign plain_text = block_settings.text | strip_newlines | strip_html | strip -%}
-{%- assign block_index = section.blocks | find_index: 'id', block.id -%}
+{%- assign icon_asset = block_settings.icon_asset | default: 'icon-discount.svg' -%}
 
 {%- unless plain_text == '' -%}
-  <slideshow-slide
-    ref="slides[]"
+  <div
     class="
-      announcement-bar__slide
+      announcement-item
       text-block
       text-block--{{ block.id }}
-      text-block--align-center
-      text-block--full-width
       custom-typography
       {% if block_settings.font_size != "" %}custom-font-size{% endif %}
       {% if block_settings.weight != "" %}custom-font-weight{% endif %}
     "
     style="
       {% render 'typography-style', settings: block_settings, preset: 'custom' %}
-      --width: 100%;
-      --text-align: center;
       --line-height: 1;
     "
     {{ block.shopify_attributes }}
-    aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
   >
-    <p class="announcement-bar__text">
-      {{ block.settings.text }}
-    </p>
+    <div class="announcement-item__content">
+      {% if block_settings.media_type == 'image' and block_settings.image != blank %}
+        <span class="announcement-item__media">
+          {{
+            block_settings.image
+            | image_url: width: 56
+            | image_tag:
+              widths: '24, 32, 40, 56',
+              sizes: '24px',
+              class: 'announcement-item__image',
+              alt: block_settings.text | strip_html
+          }}
+        </span>
+      {% else %}
+        <span class="announcement-item__media announcement-item__media--icon svg-wrapper">
+          {{ icon_asset | inline_asset_content }}
+        </span>
+      {% endif %}
+
+      <p class="announcement-bar__text">
+        {{ block.settings.text }}
+      </p>
+    </div>
 
     {% if block_settings.link != blank %}
       <a
@@ -40,7 +54,7 @@
         </span>
       </a>
     {% endif %}
-  </slideshow-slide>
+  </div>
 {%- endunless -%}
 
 {% stylesheet %}
@@ -112,6 +126,42 @@
   .text-block--align-right > * {
     margin-inline-start: auto;
   }
+
+  .announcement-item {
+    position: relative;
+  }
+
+  .announcement-item__content {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .announcement-item__media {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .announcement-item__media--icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .announcement-item__media--icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .announcement-item__image {
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    object-fit: cover;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -119,6 +169,57 @@
   "name": "t:names.announcement",
   "tag": null,
   "settings": [
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media",
+      "options": [
+        {
+          "value": "icon",
+          "label": "Ícono"
+        },
+        {
+          "value": "image",
+          "label": "Imagen"
+        }
+      ],
+      "default": "icon"
+    },
+    {
+      "type": "select",
+      "id": "icon_asset",
+      "label": "Ícono",
+      "options": [
+        {
+          "value": "icon-discount.svg",
+          "label": "Descuento"
+        },
+        {
+          "value": "icon-inventory.svg",
+          "label": "Stock"
+        },
+        {
+          "value": "icon-info.svg",
+          "label": "Información"
+        },
+        {
+          "value": "icon-orders.svg",
+          "label": "Pedidos"
+        },
+        {
+          "value": "icon-cart.svg",
+          "label": "Carrito"
+        }
+      ],
+      "default": "icon-discount.svg",
+      "visible_if": "{{ block.settings.media_type == 'icon' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen",
+      "visible_if": "{{ block.settings.media_type == 'image' }}"
+    },
     {
       "type": "inline_richtext",
       "id": "text",
