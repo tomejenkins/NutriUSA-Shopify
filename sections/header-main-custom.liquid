@@ -138,85 +138,10 @@
   >
     <ul class="header-main-custom__bottom-list list-unstyled">
       {% for link in section.settings.secondary_menu.links %}
-        {% liquid
-          assign link_title_key = link.title | strip | downcase
-          assign nav_badge = null
-          for block in section.blocks
-            assign block_title_key = block.settings.menu_item_title | strip | downcase
-            if block_title_key == link_title_key
-              assign nav_badge = block
-              break
-            endif
-          endfor
-        %}
-        <li class="header-main-custom__bottom-item{% if link.links != blank %} header-main-custom__bottom-item--has-children{% endif %}">
-          <a
-            href="{{ link.url }}"
-            class="header-main-custom__bottom-link"
-            {% if link.current %}
-              aria-current="page"
-            {% endif %}
-            {% if link.links != blank %}
-              aria-haspopup="true"
-            {% endif %}
-          >
-            <span>{{ link.title }}</span>
-
-            {% if nav_badge %}
-              {% liquid
-                assign badge_class = 'header-main-custom__badge'
-                case nav_badge.settings.badge_style
-                  when 'offer'
-                    assign badge_class = badge_class | append: ' header-main-custom__badge--offer'
-                  when 'new'
-                    assign badge_class = badge_class | append: ' header-main-custom__badge--new'
-                  when 'custom'
-                    assign badge_class = badge_class | append: ' header-main-custom__badge--custom'
-                endcase
-              %}
-              <span
-                class="{{ badge_class }}"
-                {% if nav_badge.settings.badge_style == 'custom' %}
-                  style="--badge-bg: {{ nav_badge.settings.custom_badge_background }}; --badge-text: {{ nav_badge.settings.custom_badge_text }};"
-                {% endif %}
-                {{ nav_badge.shopify_attributes }}
-              >
-                {{ nav_badge.settings.badge_text }}
-              </span>
-            {% endif %}
-
-            {% if link.links != blank %}
-              <span class="svg-wrapper header-main-custom__bottom-chevron" aria-hidden="true">
-                {{ 'icon-caret.svg' | inline_asset_content }}
-              </span>
-            {% endif %}
-          </a>
-
-          {% if link.links != blank %}
-            <ul class="header-main-custom__bottom-submenu list-unstyled" role="list">
-              {% for childlink in link.links %}
-                <li>
-                  <a href="{{ childlink.url }}"{% if childlink.current %} aria-current="page"{% endif %}>{{ childlink.title }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </li>
+        <li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
       {% endfor %}
     </ul>
   </nav>
-
-  {% if section.settings.utility_links_menu != blank %}
-    <div class="header-main-custom__utility section section--{{ section.settings.section_width }}">
-      <ul class="header-main-custom__utility-list list-unstyled" aria-label="Enlaces utilitarios">
-        {% for link in section.settings.utility_links_menu.links %}
-          <li>
-            <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endif %}
 
   <script type="module">
     const sectionId = {{ section.id | json }};
@@ -402,113 +327,10 @@
     padding: 0.75rem 0;
   }
 
-  .header-main-custom__bottom-item {
-    position: relative;
-  }
-
-  .header-main-custom__bottom-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
+  .header-main-custom__bottom-list a {
     text-decoration: none;
     color: var(--color-foreground);
     font-weight: 500;
-  }
-
-  .header-main-custom__bottom-chevron {
-    width: 0.8rem;
-    height: 0.8rem;
-    opacity: 0.7;
-  }
-
-  .header-main-custom__badge {
-    font-size: 0.7rem;
-    line-height: 1;
-    border-radius: 0.4rem;
-    padding: 0.2rem 0.4rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-  }
-
-  .header-main-custom__badge--offer {
-    background: #f97316;
-    color: #fff;
-  }
-
-  .header-main-custom__badge--new {
-    background: #fef08a;
-    color: #1f2937;
-  }
-
-  .header-main-custom__badge--custom {
-    background: var(--badge-bg, #2563eb);
-    color: var(--badge-text, #fff);
-  }
-
-  .header-main-custom__bottom-submenu {
-    position: absolute;
-    left: 0;
-    top: calc(100% + 0.5rem);
-    min-width: 210px;
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: 0.65rem;
-    padding: 0.45rem;
-    box-shadow: var(--shadow-popover);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(4px);
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-    z-index: var(--layer-heightened);
-  }
-
-  .header-main-custom__bottom-submenu a {
-    color: var(--color-foreground);
-    text-decoration: none;
-    padding: 0.5rem 0.6rem;
-    border-radius: 0.45rem;
-    display: block;
-    font-weight: 450;
-  }
-
-  .header-main-custom__bottom-submenu a:hover,
-  .header-main-custom__bottom-submenu a:focus-visible {
-    background: rgb(var(--color-foreground-rgb) / 0.07);
-  }
-
-  .header-main-custom__bottom-item--has-children:hover > .header-main-custom__bottom-submenu,
-  .header-main-custom__bottom-item--has-children:focus-within > .header-main-custom__bottom-submenu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  .header-main-custom__utility {
-    border-top: 1px solid var(--color-border);
-    padding-block: 0.6rem;
-  }
-
-  .header-main-custom__utility-list {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1.25rem;
-    margin: 0;
-    padding: 0;
-  }
-
-  .header-main-custom__utility-list a {
-    font-size: 0.9rem;
-    text-decoration: none;
-    color: var(--color-foreground);
-    opacity: 0.88;
-  }
-
-  .header-main-custom__utility-list a:hover,
-  .header-main-custom__utility-list a:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
   }
 
   @media screen and (max-width: 989px) {
@@ -542,29 +364,6 @@
     .header-main-custom__bottom-list::-webkit-scrollbar {
       display: none;
     }
-
-    .header-main-custom__bottom-submenu {
-      position: static;
-      opacity: 1;
-      visibility: visible;
-      transform: none;
-      box-shadow: none;
-      border: 0;
-      padding: 0.25rem 0 0.25rem 1rem;
-      min-width: 0;
-    }
-
-    .header-main-custom__utility-list {
-      overflow-x: auto;
-      white-space: nowrap;
-      flex-wrap: nowrap;
-      scrollbar-width: none;
-      padding-bottom: 0.2rem;
-    }
-
-    .header-main-custom__utility-list::-webkit-scrollbar {
-      display: none;
-    }
   }
 {% endstylesheet %}
 
@@ -591,11 +390,6 @@
       "type": "link_list",
       "id": "category_menu",
       "label": "Menú de categorías"
-    },
-    {
-      "type": "link_list",
-      "id": "utility_links_menu",
-      "label": "Menú de enlaces utilitarios"
     },
     {
       "type": "text",
@@ -731,74 +525,9 @@
       "default": 10
     }
   ],
-  "blocks": [
-    {
-      "type": "nav_badge",
-      "name": "Etiqueta de menú",
-      "settings": [
-        {
-          "type": "text",
-          "id": "menu_item_title",
-          "label": "Título del ítem del menú",
-          "info": "Debe coincidir exactamente con el título del enlace del menú inferior.",
-          "default": "Ofertas"
-        },
-        {
-          "type": "text",
-          "id": "badge_text",
-          "label": "Texto de la etiqueta",
-          "default": "Nuevo"
-        },
-        {
-          "type": "select",
-          "id": "badge_style",
-          "label": "Estilo",
-          "options": [
-            { "value": "offer", "label": "Oferta" },
-            { "value": "new", "label": "Nuevo" },
-            { "value": "custom", "label": "Personalizado" }
-          ],
-          "default": "offer"
-        },
-        {
-          "type": "color",
-          "id": "custom_badge_background",
-          "label": "Color de fondo",
-          "default": "#2563eb",
-          "visible_if": "{{ block.settings.badge_style == 'custom' }}"
-        },
-        {
-          "type": "color",
-          "id": "custom_badge_text",
-          "label": "Color de texto",
-          "default": "#ffffff",
-          "visible_if": "{{ block.settings.badge_style == 'custom' }}"
-        }
-      ]
-    }
-  ],
   "presets": [
     {
-      "name": "Cabecera principal NutriUSA",
-      "blocks": {
-        "badge_1": {
-          "type": "nav_badge",
-          "settings": {
-            "menu_item_title": "Ofertas",
-            "badge_text": "Offer",
-            "badge_style": "offer"
-          }
-        },
-        "badge_2": {
-          "type": "nav_badge",
-          "settings": {
-            "menu_item_title": "Novedades",
-            "badge_text": "New",
-            "badge_style": "new"
-          }
-        }
-      },
-      "block_order": ["badge_1", "badge_2"]
+      "name": "Cabecera principal NutriUSA"
     }
   ]
 }
