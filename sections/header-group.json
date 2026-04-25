@@ -58,6 +58,33 @@
         "padding-block-end": 10
       }
     },
+    "header_section": {
+      "type": "header-main-custom",
+      "settings": {
+        "main_menu": "main-menu",
+        "secondary_menu": "main-menu",
+        "category_menu": "main-menu",
+        "utility_links_menu": "",
+        "menu_button_label": "Menú",
+        "category_selector_label": "Categorías",
+        "category_default_text": "Todas las categorías",
+        "search_placeholder": "¿Qué estás buscando hoy?",
+        "show_category_selector": true,
+        "show_microphone_icon": true,
+        "location_label": "Ubicación",
+        "location_url": "",
+        "wishlist_label": "Favoritos",
+        "wishlist_url": "",
+        "compare_label": "Comparar",
+        "compare_url": "",
+        "section_width": "page-width",
+        "logo_width": 210,
+        "enable_sticky": true,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 10,
+        "padding-block-end": 10
+      }
+    },
     "header_utility_row_Xk32pM": {
       "type": "header-utility-row",
       "blocks": {
@@ -90,6 +117,12 @@
           }
         }
       },
+      "block_order": [
+        "support_1",
+        "support_2",
+        "support_3",
+        "support_4"
+      ],
       "block_order": ["support_1", "support_2", "support_3", "support_4"],
       "settings": {
         "section_width": "page-width",
