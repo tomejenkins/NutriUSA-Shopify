@@ -143,6 +143,40 @@
           </div>
         </div>
       </predictive-search-component>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="header-main-custom__search-form">
+        {% if section.settings.show_category_selector %}
+          <label class="visually-hidden" for="HeaderCategorySelect-{{ section.id }}">{{ section.settings.category_selector_label }}</label>
+          <select id="HeaderCategorySelect-{{ section.id }}" class="header-main-custom__category-select" ref="categorySelect">
+            <option value="">{{ section.settings.category_default_text }}</option>
+            {% for link in section.settings.category_menu.links %}
+              <option value="{{ link.url }}">{{ link.title }}</option>
+            {% endfor %}
+          </select>
+        {% endif %}
+
+        <label class="visually-hidden" for="HeaderSearchInput-{{ section.id }}">{{ 'content.search_input_label' | t }}</label>
+        <input
+          id="HeaderSearchInput-{{ section.id }}"
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="{{ section.settings.search_placeholder }}"
+          class="header-main-custom__search-input"
+        >
+        <input name="options[prefix]" type="hidden" value="last">
+
+        {% if section.settings.show_microphone_icon %}
+          <button type="button" class="button-unstyled header-main-custom__mic" aria-label="Buscar por voz">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Zm5-3a1 1 0 1 1 2 0 7 7 0 1 1-14 0 1 1 0 1 1 2 0 5 5 0 1 0 10 0Zm-4 8v2h-2v-2h2Z"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        <button type="submit" class="button-unstyled header-main-custom__submit" aria-label="{{ 'content.search_input_label' | t }}">
+          <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+        </button>
+      </form>
     </div>
 
     <div class="header-main-custom__actions">
@@ -250,6 +284,7 @@
             </ul>
           {% endif %}
         </li>
+        <li><a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a></li>
       {% endfor %}
     </ul>
   </nav>
@@ -293,6 +328,7 @@
     grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: center;
     gap: clamp(0.75rem, 1.2vw, 1.25rem);
+    gap: var(--gap-md);
   }
 
   .header-main-custom__menu-button {
@@ -306,6 +342,9 @@
     font-weight: 600;
     font-size: 0.92rem;
     letter-spacing: 0.01em;
+    border-radius: 0.75rem;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
   }
 
   .header-main-custom__drawer {
@@ -380,6 +419,14 @@
     box-shadow: 0 8px 20px rgb(0 0 0 / 5%);
     position: relative;
     z-index: 3;
+  .header-main-custom__search-form {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 0.8rem;
+    overflow: hidden;
+    background: var(--color-background);
   }
 
   .header-main-custom__category-select {
@@ -391,6 +438,10 @@
     background: transparent;
     min-width: 182px;
     font-size: 0.88rem;
+    min-height: 48px;
+    padding: 0 0.8rem;
+    background: transparent;
+    min-width: 170px;
   }
 
   .header-main-custom__search-input {
@@ -407,6 +458,16 @@
   .header-main-custom__submit {
     min-height: var(--header-search-control-size);
     width: 50px;
+    min-height: 48px;
+    padding: 0 0.9rem;
+    outline: 0;
+    background: transparent;
+  }
+
+  .header-main-custom__mic,
+  .header-main-custom__submit {
+    min-height: 48px;
+    width: 48px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -450,6 +511,8 @@
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+    width: 18px;
+    height: 18px;
   }
 
   .header-main-custom__actions {
@@ -461,6 +524,12 @@
   .header-main-custom__action {
     width: 42px;
     height: 42px;
+    gap: 0.25rem;
+  }
+
+  .header-main-custom__action {
+    width: 40px;
+    height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -478,6 +547,8 @@
   .header-main-custom__action .svg-wrapper {
     width: 21px;
     height: 21px;
+    width: 20px;
+    height: 20px;
   }
 
   .header-main-custom__cart-count {
@@ -618,6 +689,15 @@
   .header-main-custom__utility-list a:focus-visible {
     text-decoration: underline;
     text-underline-offset: 0.15em;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0.75rem 0;
+  }
+
+  .header-main-custom__bottom-list a {
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-weight: 500;
   }
 
   @media screen and (max-width: 989px) {
@@ -651,6 +731,18 @@
 
     .header-main-custom__search-form {
       grid-template-columns: minmax(0, 1fr) auto auto auto;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .header-main-custom__menu,
+    .header-main-custom__logo,
+    .header-main-custom__actions {
+      justify-self: start;
+    }
+
+    .header-main-custom__search-form {
+      grid-template-columns: minmax(0, 1fr) auto auto;
     }
 
     .header-main-custom__category-select {
@@ -664,6 +756,8 @@
       padding-bottom: 0.82rem;
       scrollbar-width: none;
       scroll-snap-type: x proximity;
+      padding-bottom: 0.9rem;
+      scrollbar-width: none;
     }
 
     .header-main-custom__bottom-list::-webkit-scrollbar {
@@ -983,6 +1077,9 @@
         }
       },
       "block_order": ["badge_1", "badge_2"]
+  "presets": [
+    {
+      "name": "Cabecera principal NutriUSA"
     }
   ]
 }

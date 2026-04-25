@@ -79,6 +79,36 @@
     .announcement-bar__text {
       font-size: 0.8rem;
     }
+    gap: var(--gap-lg);
+    align-items: center;
+  }
+
+  .announcement-bar__items .announcement-item {
+    min-height: 2rem;
+  }
+
+  .announcement-bar__text {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .announcement-bar__items .announcement-bar__link {
+    position: absolute;
+    inset: 0;
+  }
+
+  @media screen and (max-width: 989px) {
+    .announcement-bar__items {
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(var(--announcement-item-min-width), 1fr);
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-block-end: 0.125rem;
+    }
+
+    .announcement-bar__items::-webkit-scrollbar {
+      display: none;
+    }
   }
 {% endstylesheet %}
 
