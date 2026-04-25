@@ -1,0 +1,450 @@
+{% liquid
+  assign has_side_cards = false
+  if section.blocks.size > 0
+    assign has_side_cards = true
+  endif
+
+  assign main_sizes = '(min-width: 990px) calc((min(100vw, var(--page-width, 1200px)) - 1rem) * 0.66), 100vw'
+  assign side_sizes = '(min-width: 990px) calc((min(100vw, var(--page-width, 1200px)) - 1rem) * 0.34), 100vw'
+%}
+
+<section
+  id="shopify-section-{{ section.id }}"
+  class="home-hero-split color-{{ section.settings.color_scheme }}"
+  style="--pt: {{ section.settings.padding_top }}px; --pb: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="home-hero-split__inner section section--{{ section.settings.section_width }} spacing-style">
+    <div class="home-hero-split__grid{% unless has_side_cards %} home-hero-split__grid--single{% endunless %}">
+      <article class="home-hero-split__card home-hero-split__card--main">
+        {% if section.settings.main_link != blank %}
+          <a class="home-hero-split__media-link" href="{{ section.settings.main_link }}" aria-label="{{ section.settings.main_heading | default: section.settings.main_subheading | strip_html | escape }}">
+        {% endif %}
+
+        <div class="home-hero-split__media-wrap">
+          {% if section.settings.main_image != blank %}
+            {{
+              section.settings.main_image
+              | image_url: width: 2400
+              | image_tag:
+                widths: '640, 900, 1200, 1600, 2000, 2400',
+                sizes: main_sizes,
+                alt: section.settings.main_image.alt,
+                class: 'home-hero-split__image',
+                loading: 'eager',
+                fetchpriority: 'high'
+            }}
+          {% else %}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'home-hero-split__image home-hero-split__image--placeholder' }}
+          {% endif %}
+        </div>
+
+        {% if section.settings.main_link != blank %}
+          </a>
+        {% endif %}
+
+        <div class="home-hero-split__overlay"></div>
+
+        <div class="home-hero-split__content">
+          {% if section.settings.main_badge != blank %}
+            <p class="home-hero-split__badge">{{ section.settings.main_badge }}</p>
+          {% endif %}
+
+          {% if section.settings.main_heading != blank %}
+            <h2 class="home-hero-split__heading">{{ section.settings.main_heading }}</h2>
+          {% endif %}
+
+          {% if section.settings.main_subheading != blank %}
+            <p class="home-hero-split__subheading">{{ section.settings.main_subheading }}</p>
+          {% endif %}
+
+          {% if section.settings.main_button_text != blank and section.settings.main_button_link != blank %}
+            <a class="button home-hero-split__button" href="{{ section.settings.main_button_link }}">
+              {{ section.settings.main_button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </article>
+
+      {% if has_side_cards %}
+        <aside class="home-hero-split__side" aria-label="{{ section.settings.side_region_label | escape }}">
+          {% for block in section.blocks %}
+            <article class="home-hero-split__card home-hero-split__card--side" {{ block.shopify_attributes }}>
+              {% if block.settings.link != blank %}
+                <a class="home-hero-split__media-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: block.settings.subtitle | strip_html | escape }}">
+              {% endif %}
+
+              <div class="home-hero-split__media-wrap">
+                {% if block.settings.image != blank %}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1600
+                    | image_tag:
+                      widths: '500, 700, 900, 1200, 1600',
+                      sizes: side_sizes,
+                      alt: block.settings.image.alt,
+                      class: 'home-hero-split__image',
+                      loading: 'lazy'
+                  }}
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'home-hero-split__image home-hero-split__image--placeholder' }}
+                {% endif %}
+              </div>
+
+              {% if block.settings.link != blank %}
+                </a>
+              {% endif %}
+
+              <div class="home-hero-split__overlay home-hero-split__overlay--side"></div>
+
+              <div class="home-hero-split__content home-hero-split__content--side">
+                {% if block.settings.badge != blank %}
+                  <p class="home-hero-split__badge">{{ block.settings.badge }}</p>
+                {% endif %}
+                {% if block.settings.title != blank %}
+                  <h3 class="home-hero-split__side-title">{{ block.settings.title }}</h3>
+                {% endif %}
+                {% if block.settings.subtitle != blank %}
+                  <p class="home-hero-split__side-subtitle">{{ block.settings.subtitle }}</p>
+                {% endif %}
+                {% if block.settings.link_text != blank and block.settings.link != blank %}
+                  <a href="{{ block.settings.link }}" class="home-hero-split__side-link">{{ block.settings.link_text }}</a>
+                {% endif %}
+              </div>
+            </article>
+          {% endfor %}
+        </aside>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .home-hero-split {
+    padding-top: var(--pt);
+    padding-bottom: var(--pb);
+  }
+
+  .home-hero-split__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .home-hero-split__grid--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-hero-split__side {
+    display: grid;
+    gap: 1rem;
+    grid-auto-rows: minmax(0, 1fr);
+  }
+
+  .home-hero-split__card {
+    position: relative;
+    overflow: hidden;
+    border-radius: {{ section.settings.card_radius }}px;
+    min-height: 16rem;
+    isolation: isolate;
+    background: rgb(var(--color-foreground), 0.08);
+  }
+
+  .home-hero-split__card--main {
+    min-height: clamp(24rem, 56vw, 38rem);
+  }
+
+  .home-hero-split__card--side {
+    min-height: clamp(12rem, 20vw, 18.5rem);
+  }
+
+  .home-hero-split__media-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .home-hero-split__media-wrap,
+  .home-hero-split__image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .home-hero-split__image {
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .home-hero-split__card:hover .home-hero-split__image {
+    transform: scale(1.035);
+  }
+
+  .home-hero-split__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(120deg, rgb(10 10 10 / 65%) 10%, rgb(10 10 10 / 20%) 70%);
+  }
+
+  .home-hero-split__overlay--side {
+    background: linear-gradient(120deg, rgb(10 10 10 / 62%) 0%, rgb(10 10 10 / 30%) 100%);
+  }
+
+  .home-hero-split__content {
+    position: absolute;
+    inset: auto auto 0 0;
+    z-index: 3;
+    padding: clamp(1rem, 2.5vw, 2rem);
+    color: rgb(var(--color-background));
+    max-width: min(90%, 36rem);
+  }
+
+  .home-hero-split__content--side {
+    max-width: 95%;
+  }
+
+  .home-hero-split__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0.65rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    background: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    border-radius: 999px;
+    padding: 0.32rem 0.7rem;
+  }
+
+  .home-hero-split__heading,
+  .home-hero-split__side-title {
+    margin: 0;
+    color: inherit;
+    line-height: 1.1;
+  }
+
+  .home-hero-split__heading {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+  }
+
+  .home-hero-split__subheading,
+  .home-hero-split__side-subtitle {
+    margin: 0.7rem 0 0;
+    color: rgb(var(--color-background));
+    opacity: 0.95;
+    font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  }
+
+  .home-hero-split__side-title {
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+  }
+
+  .home-hero-split__button {
+    margin-top: 1.2rem;
+  }
+
+  .home-hero-split__side-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: rgb(var(--color-background));
+    text-decoration: underline;
+    text-underline-offset: 0.18rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 4;
+  }
+
+  @media screen and (max-width: 989px) {
+    .home-hero-split__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .home-hero-split__content {
+      max-width: 92%;
+    }
+
+    .home-hero-split__side {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .home-hero-split__side {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .home-hero-split__card--main {
+      min-height: 21rem;
+    }
+
+    .home-hero-split__card--side {
+      min-height: 12rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Home hero split",
+  "tag": "section",
+  "class": "section-home-hero-split",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main banner image"
+    },
+    {
+      "type": "text",
+      "id": "main_badge",
+      "label": "Main promo badge",
+      "default": "Save 45%"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main heading",
+      "default": "Fuel Your Goals With Premium Nutrition"
+    },
+    {
+      "type": "text",
+      "id": "main_subheading",
+      "label": "Main subheading",
+      "default": "Science-backed supplements, protein, and wellness essentials for every day."
+    },
+    {
+      "type": "text",
+      "id": "main_button_text",
+      "label": "Main button text",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "main_button_link",
+      "label": "Main button link"
+    },
+    {
+      "type": "url",
+      "id": "main_link",
+      "label": "Main banner image link"
+    },
+    {
+      "type": "text",
+      "id": "side_region_label",
+      "label": "Side cards region label",
+      "default": "Featured promotions"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "default": "page-width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 18,
+      "unit": "px"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "side_card",
+      "name": "Side promo card",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Promo badge",
+          "default": "Limited offer"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card title",
+          "default": "Build Your Daily Stack"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Card subtitle",
+          "default": "Multivitamins, omegas and minerals for everyday support."
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Explore"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Home hero split",
+      "blocks": [
+        {
+          "type": "side_card"
+        },
+        {
+          "type": "side_card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
