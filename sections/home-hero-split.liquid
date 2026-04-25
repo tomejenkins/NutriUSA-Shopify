@@ -127,7 +127,7 @@
   .home-hero-split__grid {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: clamp(0.8rem, 1.2vw, 1.1rem);
+    gap: 1rem;
   }
 
   .home-hero-split__grid--single {
@@ -147,15 +147,14 @@
     min-height: 16rem;
     isolation: isolate;
     background: rgb(var(--color-foreground), 0.08);
-    box-shadow: 0 14px 28px rgb(0 0 0 / 10%);
   }
 
   .home-hero-split__card--main {
-    min-height: clamp(26rem, 54vw, 40rem);
+    min-height: clamp(24rem, 56vw, 38rem);
   }
 
   .home-hero-split__card--side {
-    min-height: clamp(12rem, 22vw, 19.25rem);
+    min-height: clamp(12rem, 20vw, 18.5rem);
   }
 
   .home-hero-split__media-link {
@@ -184,18 +183,18 @@
     position: absolute;
     inset: 0;
     z-index: 2;
-    background: linear-gradient(120deg, rgb(10 10 10 / 70%) 8%, rgb(10 10 10 / 26%) 72%);
+    background: linear-gradient(120deg, rgb(10 10 10 / 65%) 10%, rgb(10 10 10 / 20%) 70%);
   }
 
   .home-hero-split__overlay--side {
-    background: linear-gradient(125deg, rgb(10 10 10 / 68%) 0%, rgb(10 10 10 / 34%) 100%);
+    background: linear-gradient(120deg, rgb(10 10 10 / 62%) 0%, rgb(10 10 10 / 30%) 100%);
   }
 
   .home-hero-split__content {
     position: absolute;
     inset: auto auto 0 0;
     z-index: 3;
-    padding: clamp(1.1rem, 2.6vw, 2.2rem);
+    padding: clamp(1rem, 2.5vw, 2rem);
     color: rgb(var(--color-background));
     max-width: min(90%, 36rem);
   }
@@ -226,8 +225,7 @@
   }
 
   .home-hero-split__heading {
-    font-size: clamp(2rem, 4.25vw, 3.2rem);
-    max-width: 20ch;
+    font-size: clamp(1.8rem, 4vw, 3rem);
   }
 
   .home-hero-split__subheading,
@@ -235,17 +233,15 @@
     margin: 0.7rem 0 0;
     color: rgb(var(--color-background));
     opacity: 0.95;
-    font-size: clamp(0.95rem, 1.24vw, 1.08rem);
+    font-size: clamp(0.95rem, 1.3vw, 1.1rem);
   }
 
   .home-hero-split__side-title {
-    font-size: clamp(1.18rem, 1.9vw, 1.48rem);
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
   }
 
   .home-hero-split__button {
     margin-top: 1.2rem;
-    border-radius: 999px;
-    padding-inline: 1.4rem;
   }
 
   .home-hero-split__side-link {
@@ -272,10 +268,6 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: none;
     }
-
-    .home-hero-split__card--main {
-      min-height: clamp(23.5rem, 72vw, 35rem);
-    }
   }
 
   @media screen and (max-width: 749px) {
@@ -284,19 +276,11 @@
     }
 
     .home-hero-split__card--main {
-      min-height: 20rem;
+      min-height: 21rem;
     }
 
     .home-hero-split__card--side {
-      min-height: 11.5rem;
-    }
-
-    .home-hero-split__heading {
-      font-size: clamp(1.62rem, 7.5vw, 2.2rem);
-    }
-
-    .home-hero-split__content {
-      padding: 1rem;
+      min-height: 12rem;
     }
   }
 {% endstylesheet %}
